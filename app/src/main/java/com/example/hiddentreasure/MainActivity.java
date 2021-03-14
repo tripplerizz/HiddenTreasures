@@ -47,10 +47,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView = (ImageView) findViewById(R.id.photoTaken);
-            imageView.setImageBitmap(imageBitmap);
             navController.navigate(R.id.action_nav_home_to_nav_survey);
         }
     }
@@ -68,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_maps)
-                .setDrawerLayout(drawer)
-                .build();
+        //mAppBarConfiguration = new AppBarConfiguration.Builder(
+         //       R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_maps)
+          //      .setDrawerLayout(drawer)
+           //     .build();
          navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupActionBarWithNavController(this, navController);
         NavigationUI.setupWithNavController(navigationView, navController);
 
         fab.setOnClickListener(new View.OnClickListener() {
