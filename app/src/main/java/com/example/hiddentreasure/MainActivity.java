@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private PirateCamPreview pirateCam;
     private AppBarConfiguration mAppBarConfiguration;
+    private NavController navController;
     private ImageView imageView;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView = (ImageView) findViewById(R.id.photoTaken);
             imageView.setImageBitmap(imageBitmap);
+            navController.navigate(R.id.action_nav_home_to_nav_survey);
         }
     }
 
@@ -60,31 +62,26 @@ public class MainActivity extends AppCompatActivity {
        setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dispatchTakePictureIntent();
-
-                getSupportFragmentManager().beginTransaction()
-                        .setReorderingAllowed(true)
-                        .add( R.id.nav_host_fragment , PirateSurvey.class, null)
-                        .commit();
-            }
-        });
+        final FloatingActionButton fab = findViewById(R.id.fab);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_maps)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePictureIntent();
+            }
+        });
     }
 
     @Override
