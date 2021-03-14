@@ -36,16 +36,12 @@ public class PirateSurveyFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.pirate_survay, container, false);
+        Bundle bundle = getArguments();
+        Bitmap imageBitmap = (Bitmap) bundle.get("data");
         mImageView = v.findViewById(R.id.photoTaken);
+        mImageView.setImageBitmap(imageBitmap);
+
         return v;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
-        }
-    }
 }

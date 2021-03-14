@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            navController.navigate(R.id.action_nav_home_to_nav_survey);
+            Bundle extras = data.getExtras();
+            navController.navigate(R.id.action_nav_home_to_nav_survey, extras);
         }
     }
 
