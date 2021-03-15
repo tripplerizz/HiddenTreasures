@@ -1,18 +1,15 @@
-package com.example.hiddentreasure;
+package com.example.hiddentreasure.ui;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
 
-import com.example.hiddentreasure.ui.camera.PirateCamPreview;
+import com.example.hiddentreasure.R;
+import com.example.hiddentreasure.ui.PirateCamera.PirateCamPreview;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 

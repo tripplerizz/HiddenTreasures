@@ -1,4 +1,4 @@
-package com.example.hiddentreasure.ui.camera;
+package com.example.hiddentreasure.ui.PirateCamera;
 
 import android.content.Context;
 import android.graphics.Canvas;

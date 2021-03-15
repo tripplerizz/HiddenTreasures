@@ -1,4 +1,4 @@
-package com.example.hiddentreasure.ui.gallery;
+package com.example.hiddentreasure.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.hiddentreasure.R;
+import com.example.hiddentreasure.viewmodels.GalleryViewModel;
 
 public class GalleryFragment extends Fragment {
 
