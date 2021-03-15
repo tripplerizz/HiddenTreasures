@@ -30,13 +30,13 @@ public class HomeFragment extends Fragment {
         mTreasureRecyclerView = v.findViewById(R.id.treasure_rv);
         mHomeViewModel = new HomeViewModel();
         mHomeViewModel.init();
+        initializeRecyclerView();
         mHomeViewModel.getTreasureItems().observe(requireActivity(), new Observer<List<TreasureItem>>() {
             @Override
             public void onChanged(List<TreasureItem> treasureItems) {
                 mTreasureAdapter.notifyDataSetChanged();
             }
         });
-        initializeRecyclerView();
         return v;
     }
 
