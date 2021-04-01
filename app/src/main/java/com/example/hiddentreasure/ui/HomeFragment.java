@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,20 +30,20 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         mTreasureRecyclerView = v.findViewById(R.id.treasure_rv);
-        mHomeViewModel = new HomeViewModel();
+        mHomeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         mHomeViewModel.init();
         initializeRecyclerView();
         mHomeViewModel.getTreasureItems().observe(requireActivity(), new Observer<List<TreasureItem>>() {
             @Override
             public void onChanged(List<TreasureItem> treasureItems) {
-                mTreasureAdapter.notifyDataSetChanged();
+                mTreasureAdapter.setTreasureItems(treasureItems);
             }
         });
         return v;
     }
 
     private void initializeRecyclerView() {
-        mTreasureAdapter = new TreasureAdapter((ArrayList<TreasureItem>) mHomeViewModel.getTreasureItems().getValue());
+        mTreasureAdapter = new TreasureAdapter();
         mTreasureRecyclerView.setLayoutManager(new GridLayoutManager(requireActivity(),3));
         mTreasureRecyclerView.setAdapter(mTreasureAdapter);
     }

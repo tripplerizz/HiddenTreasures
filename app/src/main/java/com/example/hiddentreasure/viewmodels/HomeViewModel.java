@@ -1,5 +1,9 @@
 package com.example.hiddentreasure.viewmodels;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,9 +13,14 @@ import com.example.hiddentreasure.repositories.TreasureRepository;
 
 import java.util.List;
 
-public class HomeViewModel extends ViewModel {
-    private MutableLiveData<List<TreasureItem>> mTreasureItems;
+public class HomeViewModel extends AndroidViewModel {
+    private LiveData<List<TreasureItem>> mTreasureItems;
     private TreasureRepository mTreasureRepository;
+
+    public HomeViewModel(@NonNull Application application) {
+        super(application);
+        mTreasureRepository = new TreasureRepository(application);
+    }
 
     public LiveData<List<TreasureItem>> getTreasureItems() {
         return mTreasureItems;
@@ -21,7 +30,6 @@ public class HomeViewModel extends ViewModel {
         if (mTreasureItems != null) {
             return;
         }
-        mTreasureRepository = TreasureRepository.getInstance();
         mTreasureItems = mTreasureRepository.getTreasureItems();
     }
 }

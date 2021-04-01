@@ -12,13 +12,10 @@ import com.example.hiddentreasure.R;
 import com.example.hiddentreasure.models.TreasureItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TreasureAdapter extends RecyclerView.Adapter<TreasureListHolder> {
-    ArrayList<TreasureItem> mTreasureItems;
-
-    public TreasureAdapter(ArrayList<TreasureItem> items) {
-        mTreasureItems = items;
-    }
+    private List<TreasureItem> mTreasureItems = new ArrayList<>();
 
     @NonNull
     @Override
@@ -36,6 +33,11 @@ public class TreasureAdapter extends RecyclerView.Adapter<TreasureListHolder> {
     @Override
     public int getItemCount() {
         return mTreasureItems.size();
+    }
+
+    public void setTreasureItems(List<TreasureItem> items) {
+        mTreasureItems = items;
+        notifyDataSetChanged();
     }
 }
 

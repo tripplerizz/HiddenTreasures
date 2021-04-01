@@ -20,7 +20,6 @@ public class TreasureItem {
         mDescription = description;
     }
 
-
     public String getName() {
         return mName;
     }
