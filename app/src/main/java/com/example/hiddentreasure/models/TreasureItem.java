@@ -1,16 +1,23 @@
 package com.example.hiddentreasure.models;
 
-import java.util.UUID;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity(tableName = "treasure")
 public class TreasureItem {
-    private UUID mId;
+    @PrimaryKey(autoGenerate = true)
+    private int mId;
+
+    @ColumnInfo(name = "name")
     private String mName;
+
+    @ColumnInfo(name = "description")
     private String mDescription;
 
     public TreasureItem(String name, String description) {
         mName = name;
         mDescription = description;
-        mId = UUID.randomUUID();
     }
 
 
@@ -20,5 +27,13 @@ public class TreasureItem {
 
     public String getDescription() {
         return mDescription;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
     }
 }

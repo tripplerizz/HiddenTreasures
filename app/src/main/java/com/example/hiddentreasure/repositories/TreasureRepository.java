@@ -2,6 +2,7 @@ package com.example.hiddentreasure.repositories;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.room.Room;
 
 import com.example.hiddentreasure.models.TreasureItem;
 
@@ -27,8 +28,7 @@ public class TreasureRepository {
 
     public MutableLiveData<List<TreasureItem>> getTreasureItems() {
         setTreasureItems();
-        MutableLiveData<List<TreasureItem>> mTreasureData = new MutableLiveData<List<TreasureItem>>(mTreasureItems);
-        return mTreasureData;
+        return new MutableLiveData<List<TreasureItem>>(mTreasureItems);
     }
 
     public void setTreasureItems() {
