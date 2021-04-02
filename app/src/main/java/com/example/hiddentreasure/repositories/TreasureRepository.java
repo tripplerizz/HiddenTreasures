@@ -58,18 +58,4 @@ public class TreasureRepository {
     public LiveData<List<TreasureItem>> getTreasureItems() {
         return mTreasureItems;
     }
-
-    public void setTreasureItems() {
-        /*
-        mTreasureItems = new ArrayList<>(Arrays.asList(
-                new TreasureItem("Pull-up bar", "Good for pulling"),
-                new TreasureItem("Nintendo Switch", "Play BotW"),
-                new TreasureItem("Incense", "For the praying"),
-                new TreasureItem("Cat", "Pls take care of it"),
-                new TreasureItem("Candle", "For the romance"),
-                new TreasureItem("Arm", "Could be useful"),
-                new TreasureItem("Leg", "Go break one")
-        ));
-        */
-    }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class HomeViewModel extends AndroidViewModel {
     private LiveData<List<TreasureItem>> mTreasureItems;
-    private TreasureRepository mTreasureRepository;
+    private final TreasureRepository mTreasureRepository;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);

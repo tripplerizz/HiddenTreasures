@@ -15,9 +15,13 @@ public class TreasureItem {
     @ColumnInfo(name = "description")
     private String mDescription;
 
-    public TreasureItem(String name, String description) {
+    @ColumnInfo(name = "image", typeAffinity = ColumnInfo.BLOB)
+    private byte[] mImage;
+
+    public TreasureItem(String name, String description, byte[] image) {
         mName = name;
         mDescription = description;
+        mImage = image;
     }
 
     public String getName() {
@@ -30,6 +34,10 @@ public class TreasureItem {
 
     public int getId() {
         return mId;
+    }
+
+    public byte[] getImage() {
+        return mImage;
     }
 
     public void setId(int id) {
