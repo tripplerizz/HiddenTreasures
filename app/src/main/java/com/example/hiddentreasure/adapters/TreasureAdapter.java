@@ -1,6 +1,5 @@
 package com.example.hiddentreasure.adapters;
 
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.hiddentreasure.R;
-import com.example.hiddentreasure.models.TreasureItem;
+import com.example.hiddentreasure.db.TreasureItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class TreasureAdapter extends RecyclerView.Adapter<TreasureAdapter.Treasu
 
     @Override
     public void onBindViewHolder(@NonNull TreasureListHolder holder, int position) {
-        byte[] imgData = mTreasureItems.get(position).getImage();
+        String imgData = mTreasureItems.get(position).getImageUrl();
         holder.bind(imgData);
     }
 
@@ -44,7 +43,6 @@ public class TreasureAdapter extends RecyclerView.Adapter<TreasureAdapter.Treasu
         notifyDataSetChanged();
     }
 
-
     class TreasureListHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private static final String TAG = "TreasureListHolder";
         private ImageView mItemImage;
@@ -55,10 +53,10 @@ public class TreasureAdapter extends RecyclerView.Adapter<TreasureAdapter.Treasu
             itemView.setOnClickListener(this);
         }
 
-        public void bind(byte[] imgData) {
+        public void bind(String url) {
             Glide
                     .with(mItemImage.getContext())
-                    .load(BitmapFactory.decodeByteArray(imgData, 0, imgData.length))
+                    .load(url)
                     .centerCrop()
                     .into(mItemImage);
         }

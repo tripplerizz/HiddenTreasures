@@ -3,59 +3,26 @@ package com.example.hiddentreasure.repositories;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.room.Delete;
-import androidx.room.Insert;
-import androidx.room.Room;
-import androidx.room.Update;
 
-import com.example.hiddentreasure.db.TreasureDAO;
 import com.example.hiddentreasure.db.TreasureDatabase;
-import com.example.hiddentreasure.models.TreasureItem;
+import com.example.hiddentreasure.db.TreasureItem;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class TreasureRepository {
     private static TreasureRepository mInstance;
-    private final LiveData<List<TreasureItem>> mTreasureItems;
-    private final TreasureDAO mTreasureDAO;
+    private TreasureDatabase mDatabase;
+    private LiveData<List<TreasureItem>> mTreasureItems;
 
     public TreasureRepository(Application application) {
-        TreasureDatabase database = TreasureDatabase.getInstance(application);
-        mTreasureDAO = database.mTreasureDAO();
-        mTreasureItems = mTreasureDAO.getAllTreasures();
-    }
-
-    void insertTreasure(final TreasureItem item) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mTreasureDAO.insertTreasure(item);
-            }
-        }).start();
-    }
-
-    void updateTreasure(final TreasureItem item) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mTreasureDAO.updateTreasure(item);
-            }
-        }).start();
-    }
-
-    void deleteTreasure(final TreasureItem item) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mTreasureDAO.deleteTreasure(item);
-            }
-        }).start();
+        mDatabase = TreasureDatabase.getInstance(application);
+        mTreasureItems = getTreasureItems();
     }
 
     public LiveData<List<TreasureItem>> getTreasureItems() {
+        if (mTreasureItems == null) {
+            mTreasureItems = mDatabase.getAllTreasures();
+        }
         return mTreasureItems;
     }
 }

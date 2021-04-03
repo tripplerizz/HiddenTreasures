@@ -1,86 +1,49 @@
 package com.example.hiddentreasure.db;
 
 import android.content.Context;
-import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.room.Database;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
-import com.example.hiddentreasure.models.TreasureItem;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import java.util.List;
 
-@Database(entities = {TreasureItem.class}, version = 1, exportSchema = false)
-public abstract class TreasureDatabase extends RoomDatabase {
+import static com.example.hiddentreasure.other.Constants.*;
+
+public class TreasureDatabase {
+    private static final String TAG = "TreasureDatabase";
     private static TreasureDatabase instance;
+    private FirebaseFirestore mFirebaseFirestore;
+    private CollectionReference mCollection;
+    private MutableLiveData<List<TreasureItem>> mItems = new MutableLiveData<>();
 
-    public abstract TreasureDAO mTreasureDAO();
 
     public static synchronized TreasureDatabase getInstance(Context context) {
         if (instance == null) {
-            instance = Room.databaseBuilder(
-                    context.getApplicationContext(),
-                    TreasureDatabase.class,
-                    "treasure_db"
-            )
-                    .fallbackToDestructiveMigration()
-                    .addCallback(roomCallback)
-                    .build();
+            instance = new TreasureDatabase(context);
         }
         return instance;
     }
 
-    private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-            final TreasureDAO treasureDAO = instance.mTreasureDAO();
-            new Thread(new Runnable() {
-                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                @Override
-                public void run() {
-                    byte[] pullUpbarImg;
-                    byte[] nintendoSwitchImg;
-                    byte[] incenseImg;
-                    byte[] cat;
+    private TreasureDatabase(Context context) {
+        mFirebaseFirestore = FirebaseFirestore.getInstance();
+    }
 
-                    try {
-                        pullUpbarImg = getByteArrayImage("https://cdn.shopify.com/s/files/1/0997/2134/products/Main1024x1024_1200x.jpg?v=1578687773");
-                        nintendoSwitchImg = getByteArrayImage("https://images-na.ssl-images-amazon.com/images/I/61-PblYntsL._AC_SL1500_.jpg");
-                        incenseImg = getByteArrayImage("https://images-na.ssl-images-amazon.com/images/I/51l0T9gY3NL._AC_SX522_.jpg");
-                        cat = getByteArrayImage("https://c.files.bbci.co.uk/12A9B/production/_111434467_gettyimages-1143489763.jpg");
-
-                        // sample data to test database
-                        treasureDAO.insertTreasure(new TreasureItem("Pull-up bar", "Good for pulling", pullUpbarImg));
-                        treasureDAO.insertTreasure(new TreasureItem("Nintendo Switch", "Play BotW", nintendoSwitchImg));
-                        treasureDAO.insertTreasure(new TreasureItem("Incense", "For the praying", incenseImg));
-                        treasureDAO.insertTreasure(new TreasureItem("Cat", "Pls take care of it", cat));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        }
-    };
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private static byte[] getByteArrayImage(String url) throws IOException {
-        URL imageUrl = new URL(url);
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        try (InputStream inputStream = imageUrl.openStream()) {
-            int n;
-            byte[] buffer = new byte[1024];
-            while ((n = inputStream.read(buffer)) != -1) {
-                output.write(buffer, 0, n);
+    public LiveData<List<TreasureItem>> getAllTreasures() {
+        mCollection = mFirebaseFirestore.collection(TREASURE_COLLECTION);
+        mCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+               mItems.setValue(task.getResult().toObjects(TreasureItem.class));
             }
-        }
-        return output.toByteArray();
+        });
+        return mItems;
     }
 }
