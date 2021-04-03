@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1004162641336",
+    "project_id": "hidden-treasure-74e92",
+    "storage_bucket": "hidden-treasure-74e92.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004162641336:android:a1b85bf1ab02f7feca734d",
+        "android_client_info": {
+          "package_name": "com.example.hiddentreasure"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004162641336-ei7e14q62b550vporo1c8m31cu3848bi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoQj9h83WeXyQujJwbMet1vDQD4awfAhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004162641336-ei7e14q62b550vporo1c8m31cu3848bi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
