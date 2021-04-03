@@ -1,13 +1,11 @@
 package com.example.hiddentreasure.adapters;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,8 +17,10 @@ import com.example.hiddentreasure.models.TreasureItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreasureAdapter extends RecyclerView.Adapter<TreasureListHolder> {
+public class TreasureAdapter extends RecyclerView.Adapter<TreasureAdapter.TreasureListHolder> {
+    private static final String TAG = "TreasureAdapter";
     private List<TreasureItem> mTreasureItems = new ArrayList<>();
+    private OnItemClickListener mListener;
 
     @NonNull
     @Override
@@ -30,10 +30,8 @@ public class TreasureAdapter extends RecyclerView.Adapter<TreasureListHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TreasureListHolder holder, int position) {
-        String name = mTreasureItems.get(position).getName();
-        String description = mTreasureItems.get(position).getDescription();
         byte[] imgData = mTreasureItems.get(position).getImage();
-        holder.bind(name, description, imgData);
+        holder.bind(imgData);
     }
 
     @Override
@@ -45,29 +43,43 @@ public class TreasureAdapter extends RecyclerView.Adapter<TreasureListHolder> {
         mTreasureItems = items;
         notifyDataSetChanged();
     }
-}
 
-class TreasureListHolder extends RecyclerView.ViewHolder {
-    private static final String TAG = "TreasureListHolder";
-    private TextView mName;
-    private TextView mDescription;
-    private ImageView mItemImage;
 
-    public TreasureListHolder(@NonNull View itemView) {
-        super(itemView);
-        mName = itemView.findViewById(R.id.name_tv);
-        mDescription = itemView.findViewById(R.id.description_tv);
-        mItemImage = itemView.findViewById(R.id.item_iv);
+    class TreasureListHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private static final String TAG = "TreasureListHolder";
+        private ImageView mItemImage;
+
+        public TreasureListHolder(@NonNull View itemView) {
+            super(itemView);
+            mItemImage = itemView.findViewById(R.id.item_iv);
+            itemView.setOnClickListener(this);
+        }
+
+        public void bind(byte[] imgData) {
+            Glide
+                    .with(mItemImage.getContext())
+                    .load(BitmapFactory.decodeByteArray(imgData, 0, imgData.length))
+                    .centerCrop()
+                    .into(mItemImage);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            if (mListener != null && position != RecyclerView.NO_POSITION) {
+                mListener.onItemClick(mTreasureItems.get(position));
+            }
+        }
     }
 
-    public void bind(String name, String description, byte[] imgData) {
-        mName.setText(name);
-        mDescription.setText(description);
-        Glide
-                .with(mItemImage.getContext())
-                .load(BitmapFactory.decodeByteArray(imgData, 0, imgData.length))
-                .centerCrop()
-                .override(512)
-                .into(mItemImage);
+    public interface OnItemClickListener {
+        void onItemClick(TreasureItem item);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        Log.d(TAG, "setOnItemClickListener: added listener");
+        mListener = listener;
     }
 }
+
+

@@ -1,15 +1,21 @@
 package com.example.hiddentreasure.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,9 +28,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
+    private static final String TAG = "HomeFragment";
     private HomeViewModel mHomeViewModel;
     private RecyclerView mTreasureRecyclerView;
     private TreasureAdapter mTreasureAdapter;
+    private NavController mNavController;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mNavController = NavHostFragment.findNavController(this);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +58,13 @@ public class HomeFragment extends Fragment {
 
     private void initializeRecyclerView() {
         mTreasureAdapter = new TreasureAdapter();
-        mTreasureRecyclerView.setLayoutManager(new GridLayoutManager(requireActivity(),3));
+        mTreasureAdapter.setOnItemClickListener(new TreasureAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(TreasureItem item) {
+                mNavController.navigate(R.id.action_nav_home_to_treasureInfoFragment);
+            }
+        });
+        mTreasureRecyclerView.setLayoutManager(new GridLayoutManager(requireActivity(), 3));
         mTreasureRecyclerView.setAdapter(mTreasureAdapter);
     }
 }
