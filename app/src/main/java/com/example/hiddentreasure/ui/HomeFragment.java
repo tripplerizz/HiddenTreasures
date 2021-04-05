@@ -28,11 +28,10 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
-    public static final String TREASURE_TAG = "terasure_tag";
+    public static final String TREASURE_TAG = "treasure_tag";
     private RecyclerView mTreasureRecyclerView;
     private TreasureAdapter mTreasureAdapter;
     private NavController mNavController;
-    private FloatingActionButton mAddTreasureFAB;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +42,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-//        mAddTreasureFAB = v.findViewById(R.id.add_treasure_fab);
         mTreasureRecyclerView = v.findViewById(R.id.treasure_rv);
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.init();

@@ -75,7 +75,6 @@ public class TreasureAdapter extends RecyclerView.Adapter<TreasureAdapter.Treasu
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
-        Log.d(TAG, "setOnItemClickListener: added listener");
         mListener = listener;
     }
 }

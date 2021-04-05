@@ -29,17 +29,18 @@ import pub.devrel.easypermissions.EasyPermissions;
 import pub.devrel.easypermissions.PermissionRequest;
 
 public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
-    private static final String TAG = "MainActivity" ;
+    private static final String TAG = "MainActivity";
     private static final int RC_CAMERA_AND_LOCATION = 123;
     private AppBarConfiguration mAppBarConfiguration;
     private NavController navController;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static String perms [] = { Manifest.permission.CAMERA,
-                                      Manifest.permission.READ_EXTERNAL_STORAGE,
-                                      Manifest.permission.INTERNET,
-                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                       Manifest.permission.ACCESS_FINE_LOCATION
-                                        };
+    private static String perms[] = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.INTERNET,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -47,15 +48,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            // display error state to the user
-        }
     }
 
     @Override
@@ -87,11 +79,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dispatchTakePictureIntent();
-            }
+        fab.setOnClickListener(v -> {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         });
     }
 

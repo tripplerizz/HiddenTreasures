@@ -38,12 +38,7 @@ public class TreasureDatabase {
 
     public LiveData<List<TreasureItem>> getAllTreasures() {
         mCollection = mFirebaseFirestore.collection(TREASURE_COLLECTION);
-        mCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-               mItems.setValue(task.getResult().toObjects(TreasureItem.class));
-            }
-        });
+        mCollection.get().addOnCompleteListener(task -> mItems.setValue(task.getResult().toObjects(TreasureItem.class)));
         return mItems;
     }
 }
