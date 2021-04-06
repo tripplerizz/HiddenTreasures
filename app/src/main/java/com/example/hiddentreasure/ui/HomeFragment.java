@@ -46,24 +46,16 @@ public class HomeFragment extends Fragment {
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.init();
         initializeRecyclerView();
-        homeViewModel.getTreasureItems().observe(requireActivity(), new Observer<List<TreasureItem>>() {
-            @Override
-            public void onChanged(List<TreasureItem> treasureItems) {
-                mTreasureAdapter.setTreasureItems(treasureItems);
-            }
-        });
+        homeViewModel.getTreasureItems().observe(requireActivity(), treasureItems -> mTreasureAdapter.setTreasureItems(treasureItems));
         return v;
     }
 
     private void initializeRecyclerView() {
         mTreasureAdapter = new TreasureAdapter();
-        mTreasureAdapter.setOnItemClickListener(new TreasureAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(TreasureItem item) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(TREASURE_TAG, item);
-                mNavController.navigate(R.id.action_nav_home_to_treasureInfoFragment, bundle);
-            }
+        mTreasureAdapter.setOnItemClickListener(item -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(TREASURE_TAG, item);
+            mNavController.navigate(R.id.action_nav_home_to_treasureInfoFragment, bundle);
         });
         mTreasureRecyclerView.setLayoutManager(new GridLayoutManager(requireActivity(), 3));
         mTreasureRecyclerView.setAdapter(mTreasureAdapter);

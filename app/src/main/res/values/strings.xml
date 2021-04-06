@@ -12,4 +12,8 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="maps">Maps</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enter_your_pirate_knowledge">Enter your pirate knowledge</string>
+    <string name="submit_your_treasure">Submit your treasure!</string>
+    <string name="description">Description</string>
+    <string name="name_of_treasure_here">Name of treasure here</string>
 </resources>

@@ -37,7 +37,7 @@
         android:id="@+id/nav_survey"
         android:name="com.example.hiddentreasure.ui.PirateCamera.PirateSurveyFragment"
         android:label="fragment_pirate_survey"
-        tools:layout="@layout/pirate_survay" />
+        tools:layout="@layout/pirate_survey" />
     <fragment
         android:id="@+id/treasureInfoFragment"
         android:name="com.example.hiddentreasure.ui.TreasureInfoFragment"

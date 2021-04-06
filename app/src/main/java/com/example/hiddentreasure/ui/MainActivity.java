@@ -62,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /* TODO I'm prompted every time I launch the app for the permission. I should be able to
+            accept it once and then never be prompted again
+        */
         EasyPermissions.requestPermissions(this, "Camera, Internet, and location access plsssss?",
                 RC_CAMERA_AND_LOCATION, perms);
 
