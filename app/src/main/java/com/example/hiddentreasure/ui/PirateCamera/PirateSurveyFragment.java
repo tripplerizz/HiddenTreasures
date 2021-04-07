@@ -1,8 +1,10 @@
 package com.example.hiddentreasure.ui.PirateCamera;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,8 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.example.hiddentreasure.R;
+import com.example.hiddentreasure.db.TreasureDatabase;
+import com.example.hiddentreasure.repositories.TreasureRepository;
 
 
 public class PirateSurveyFragment extends Fragment {
@@ -22,10 +26,13 @@ public class PirateSurveyFragment extends Fragment {
     private Button mSubmitTreasureBtn;
     private EditText mTreasureDescriptionET;
     private EditText mTreasureNameET;
+    private Bitmap mImageBitmap;
+    private TreasureDatabase mDatabase;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDatabase = TreasureDatabase.getInstance(getActivity());
     }
 
     @Nullable
@@ -33,20 +40,21 @@ public class PirateSurveyFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.pirate_survey, container, false);
         Bundle bundle = getArguments();
-        Bitmap imageBitmap = (Bitmap) bundle.get("data");
+        Bitmap mImageBitmap = (Bitmap) bundle.get("data");
         mImageView = v.findViewById(R.id.photoTaken);
         mSubmitTreasureBtn = v.findViewById(R.id.submit_treasure_btn);
         mTreasureDescriptionET = v.findViewById(R.id.treasure_description_et);
         mTreasureNameET = v.findViewById(R.id.treasure_name_et);
         Glide
-                .with(getActivity())
-                .load(imageBitmap)
+                .with(requireActivity())
+                .load(mImageBitmap)
                 .fitCenter()
                 .into(mImageView);
 
         mSubmitTreasureBtn.setOnClickListener(view -> {
             String name = mTreasureNameET.getText().toString();
             String description = mTreasureDescriptionET.getText().toString();
+            mDatabase.uploadPhoto(name, mImageBitmap);
         });
 
         return v;

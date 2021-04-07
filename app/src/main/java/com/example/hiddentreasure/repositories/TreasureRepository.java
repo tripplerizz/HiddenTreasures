@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.hiddentreasure.db.TreasureDatabase;
 import com.example.hiddentreasure.db.TreasureItem;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ public class TreasureRepository {
     private static TreasureRepository mInstance;
     private TreasureDatabase mDatabase;
     private LiveData<List<TreasureItem>> mTreasureItems;
+    private StorageReference mStorageReference;
+
 
     public TreasureRepository(Application application) {
         mDatabase = TreasureDatabase.getInstance(application);
