@@ -12,36 +12,32 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.hiddentreasure.R;
 import com.example.hiddentreasure.db.TreasureItem;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreasureAdapter extends RecyclerView.Adapter<TreasureAdapter.TreasureListHolder> {
+public class TreasureAdapter extends FirestoreRecyclerAdapter<TreasureItem, TreasureAdapter.TreasureListHolder> {
     private static final String TAG = "TreasureAdapter";
-    private List<TreasureItem> mTreasureItems = new ArrayList<>();
     private OnItemClickListener mListener;
+
+    public TreasureAdapter(@NonNull FirestoreRecyclerOptions<TreasureItem> options) {
+        super(options);
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull TreasureListHolder holder, int position, @NonNull TreasureItem model) {
+        holder.bind(model.getImageUrl());
+    }
 
     @NonNull
     @Override
     public TreasureListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new TreasureListHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_home, parent, false));
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_home, parent, false);
+        return new TreasureListHolder(v);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull TreasureListHolder holder, int position) {
-        String imgData = mTreasureItems.get(position).getImageUrl();
-        holder.bind(imgData);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mTreasureItems.size();
-    }
-
-    public void setTreasureItems(List<TreasureItem> items) {
-        mTreasureItems = items;
-        notifyDataSetChanged();
-    }
 
     class TreasureListHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private static final String TAG = "TreasureListHolder";
@@ -65,7 +61,7 @@ public class TreasureAdapter extends RecyclerView.Adapter<TreasureAdapter.Treasu
         public void onClick(View view) {
             int position = getAdapterPosition();
             if (mListener != null && position != RecyclerView.NO_POSITION) {
-                mListener.onItemClick(mTreasureItems.get(position));
+                mListener.onItemClick(getItem(position));
             }
         }
     }

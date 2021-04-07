@@ -15,6 +15,12 @@ public class TreasureItem implements Parcelable {
     public TreasureItem() {
     }
 
+    public TreasureItem(String name, String description, String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
+
     protected TreasureItem(Parcel in) {
         id = in.readString();
         name = in.readString();

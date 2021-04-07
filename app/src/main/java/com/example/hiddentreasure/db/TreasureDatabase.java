@@ -2,12 +2,14 @@ package com.example.hiddentreasure.db;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,6 +23,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.hiddentreasure.other.Constants.*;
 
@@ -44,26 +47,33 @@ public class TreasureDatabase {
     private TreasureDatabase(Context context) {
         mFirebaseFirestore = FirebaseFirestore.getInstance();
         mFirebaseStorage = FirebaseStorage.getInstance();
+        mCollection = mFirebaseFirestore.collection(TREASURE_COLLECTION);
         mStorageReference = mFirebaseStorage.getReference();
     }
 
-    public void uploadPhoto(String fileName, Bitmap bitmap) {
-        StorageReference reference = mStorageReference.child(fileName);
+    public void uploadPhoto(String name, String description, Bitmap bitmap) {
+        StorageReference reference = mStorageReference.child(name + ".jpeg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = reference.putBytes(data);
-        uploadTask.addOnFailureListener(e -> {
-            Log.d(TAG, "uploadPhoto: upload failed");
-        }).addOnSuccessListener(taskSnapshot -> {
-            Log.d(TAG, "Upload success!");
-        });
+        uploadTask
+                .addOnFailureListener(e -> Log.d(TAG, "Upload failed"))
+                .addOnSuccessListener(taskSnapshot -> Log.d(TAG, "Upload success!"));
+
+        uploadTask.continueWithTask(
+                task -> reference.getDownloadUrl())
+                .addOnCompleteListener(task -> {
+                    String url = Objects.requireNonNull(task.getResult()).toString();
+                    mCollection.document(name)
+                            .set(new TreasureItem(name, description, url))
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "onSuccess: Successfully written!"))
+                            .addOnFailureListener(e -> Log.d(TAG, "onFailure: Error writing document"));
+                });
     }
 
-    public LiveData<List<TreasureItem>> getAllTreasures() {
-        mCollection = mFirebaseFirestore.collection(TREASURE_COLLECTION);
-        mCollection.get().addOnCompleteListener(task -> mItems.setValue(task.getResult().toObjects(TreasureItem.class)));
-        return mItems;
+    public CollectionReference getCollection() {
+        return mFirebaseFirestore.collection(TREASURE_COLLECTION);
     }
 }

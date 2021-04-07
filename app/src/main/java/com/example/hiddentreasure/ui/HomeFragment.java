@@ -1,9 +1,11 @@
 package com.example.hiddentreasure.ui;
 
+import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +22,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hiddentreasure.R;
 import com.example.hiddentreasure.adapters.TreasureAdapter;
+import com.example.hiddentreasure.db.TreasureDatabase;
 import com.example.hiddentreasure.db.TreasureItem;
+import com.example.hiddentreasure.other.Constants;
 import com.example.hiddentreasure.viewmodels.HomeViewModel;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
@@ -32,6 +39,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView mTreasureRecyclerView;
     private TreasureAdapter mTreasureAdapter;
     private NavController mNavController;
+    HomeViewModel mHomeViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,22 +51,37 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         mTreasureRecyclerView = v.findViewById(R.id.treasure_rv);
-        HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        homeViewModel.init();
+        mHomeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         initializeRecyclerView();
-        homeViewModel.getTreasureItems().observe(requireActivity(), treasureItems -> mTreasureAdapter.setTreasureItems(treasureItems));
         return v;
     }
 
     private void initializeRecyclerView() {
-        mTreasureAdapter = new TreasureAdapter();
+        FirestoreRecyclerOptions<TreasureItem> options = new FirestoreRecyclerOptions.Builder<TreasureItem>()
+                .setQuery(mHomeViewModel.getQuery(), TreasureItem.class)
+                .build();
+
+        mTreasureAdapter = new TreasureAdapter(options);
+        mTreasureRecyclerView.setLayoutManager(new GridLayoutManager(requireActivity(), 3));
+        mTreasureRecyclerView.setAdapter(mTreasureAdapter);
+
         mTreasureAdapter.setOnItemClickListener(item -> {
             Bundle bundle = new Bundle();
             bundle.putParcelable(TREASURE_TAG, item);
             mNavController.navigate(R.id.action_nav_home_to_treasureInfoFragment, bundle);
         });
-        mTreasureRecyclerView.setLayoutManager(new GridLayoutManager(requireActivity(), 3));
-        mTreasureRecyclerView.setAdapter(mTreasureAdapter);
+
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mTreasureAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mTreasureAdapter.stopListening();
+    }
 }

@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +13,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.example.hiddentreasure.R;
 import com.example.hiddentreasure.db.TreasureDatabase;
-import com.example.hiddentreasure.repositories.TreasureRepository;
 
 
 public class PirateSurveyFragment extends Fragment {
@@ -28,11 +28,13 @@ public class PirateSurveyFragment extends Fragment {
     private EditText mTreasureNameET;
     private Bitmap mImageBitmap;
     private TreasureDatabase mDatabase;
+    private NavController mNavController;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDatabase = TreasureDatabase.getInstance(getActivity());
+        mNavController = NavHostFragment.findNavController(this);
     }
 
     @Nullable
@@ -54,7 +56,8 @@ public class PirateSurveyFragment extends Fragment {
         mSubmitTreasureBtn.setOnClickListener(view -> {
             String name = mTreasureNameET.getText().toString();
             String description = mTreasureDescriptionET.getText().toString();
-            mDatabase.uploadPhoto(name, mImageBitmap);
+            mDatabase.uploadPhoto(name, description, mImageBitmap);
+            mNavController.navigate(R.id.action_nav_survey_to_nav_home);
         });
 
         return v;
