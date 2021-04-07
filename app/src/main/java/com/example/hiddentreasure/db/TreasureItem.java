@@ -7,7 +7,6 @@ import androidx.room.Entity;
 
 @Entity(tableName = "treasure")
 public class TreasureItem implements Parcelable {
-    private String id;
     private String name;
     private String description;
     private String imageUrl;
@@ -22,7 +21,6 @@ public class TreasureItem implements Parcelable {
     }
 
     protected TreasureItem(Parcel in) {
-        id = in.readString();
         name = in.readString();
         description = in.readString();
         imageUrl = in.readString();
@@ -48,16 +46,9 @@ public class TreasureItem implements Parcelable {
         return description;
     }
 
-    public String getId() {
-        return id;
-    }
 
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     @Override
@@ -67,7 +58,6 @@ public class TreasureItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
         parcel.writeString(name);
         parcel.writeString(description);
         parcel.writeString(imageUrl);

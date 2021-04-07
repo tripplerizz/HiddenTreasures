@@ -19,7 +19,7 @@ import com.example.hiddentreasure.db.TreasureItem;
 public class TreasureInfoFragment extends Fragment {
     private static final String TAG = "TreasureInfoFragment";
     private TreasureItem item;
-    private String itemInfoString = "Name: %s\nId: %s\nDescription: %s\nPhotoUrl: %s\n";
+    private String itemInfoString = "Name: %s\nDescription: %s\nPhotoUrl: %s\n";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class TreasureInfoFragment extends Fragment {
         // TODO for hector find out how to pull image
         String ImageUrl = item.getImageUrl();
         TextView itemInfo = v.findViewById(R.id.itemInfo);
-        itemInfoString = String.format(itemInfoString, item.getName(), item.getId(),item.getDescription(), item.getImageUrl());
+        itemInfoString = String.format(itemInfoString, item.getName(), item.getDescription(), item.getImageUrl());
         itemInfo.setText(itemInfoString);
         // TODO add UI to this fragment
         // This is where the user clicks on a picture from Home and you need to display stuff

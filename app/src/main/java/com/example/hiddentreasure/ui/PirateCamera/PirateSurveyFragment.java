@@ -42,7 +42,7 @@ public class PirateSurveyFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.pirate_survey, container, false);
         Bundle bundle = getArguments();
-        Bitmap mImageBitmap = (Bitmap) bundle.get("data");
+        mImageBitmap = (Bitmap) bundle.get("data");
         mImageView = v.findViewById(R.id.photoTaken);
         mSubmitTreasureBtn = v.findViewById(R.id.submit_treasure_btn);
         mTreasureDescriptionET = v.findViewById(R.id.treasure_description_et);

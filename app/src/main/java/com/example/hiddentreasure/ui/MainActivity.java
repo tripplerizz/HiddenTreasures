@@ -83,6 +83,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         NavigationUI.setupWithNavController(navigationView, navController);
 
         fab.setOnClickListener(v -> {
+            /*
+                TODO Right now user is able to add items from their camera. The user should also
+                 have the option to choose a picture from their gallery. Change this button to go
+                 straight to the PirateSurveyFragment and then give them the option to either
+                 pick from their own pictures app or take a picture
+             */
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         });
