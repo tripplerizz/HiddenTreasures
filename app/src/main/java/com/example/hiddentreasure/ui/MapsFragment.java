@@ -4,23 +4,40 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.hiddentreasure.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.common.collect.Maps;
+
+import java.util.concurrent.ExecutionException;
 
 public class MapsFragment extends Fragment {
+    private static final String TAG = "MapsFragment";
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
-
         /**
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
@@ -32,9 +49,32 @@ public class MapsFragment extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(33.7490, -84.3880);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Atlanta"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            String url = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Midtown_atlanta_%28cropped%29.jpg/850px-Midtown_atlanta_%28cropped%29.jpg";
+            LatLng atlanta = new LatLng(33.7490, -84.3880);
+
+            Log.d(TAG, "onMapReady: before inserting image");
+
+            Glide.with(MapsFragment.this)
+                    .asBitmap()
+                    .load(url)
+                    .override(20, 32)
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            Log.d(TAG, "onResourceReady: image is ready");
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(atlanta)
+                                    .title("Marker in Atlanta")
+                                    .icon(BitmapDescriptorFactory.fromBitmap(resource))
+                            );
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                        }
+                    });
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(atlanta));
         }
     };
 
