@@ -13,13 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.hiddentreasure.R;
 import com.example.hiddentreasure.db.TreasureItem;
 
 public class TreasureInfoFragment extends Fragment {
     private static final String TAG = "TreasureInfoFragment";
     private TreasureItem item;
-    private String itemInfoString = "Name: %s\nDescription: %s\nPhotoUrl: %s\n";
+    private String itemInfoString = "Name: %s\nDescription: %s\n";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,10 +39,14 @@ public class TreasureInfoFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_treasure_info, container, false);
         ImageView itemImage = v.findViewById(R.id.itemImage);
-        // TODO for hector find out how to pull image
         String ImageUrl = item.getImageUrl();
+        Glide
+                .with(itemImage.getContext())
+                .load(ImageUrl)
+                .centerCrop()
+                .into(itemImage);
         TextView itemInfo = v.findViewById(R.id.itemInfo);
-        itemInfoString = String.format(itemInfoString, item.getName(), item.getDescription(), item.getImageUrl());
+        itemInfoString = String.format(itemInfoString, item.getName(), item.getDescription());
         itemInfo.setText(itemInfoString);
         // TODO add UI to this fragment
         // This is where the user clicks on a picture from Home and you need to display stuff
