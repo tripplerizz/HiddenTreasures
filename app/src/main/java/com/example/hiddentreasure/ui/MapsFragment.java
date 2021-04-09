@@ -71,6 +71,9 @@ public class MapsFragment extends Fragment {
                             TreasureItem item = documentSnapshot.toObject(TreasureItem.class);
                             GeoPoint itemLocation = item.getLocation();
                             LatLng itemLatLng = new LatLng(itemLocation.getLatitude(), itemLocation.getLongitude());
+                            if (getActivity() == null)  {
+                                continue;
+                            }
                             addMarker(googleMap, itemLatLng, item);
                         }
                     });
