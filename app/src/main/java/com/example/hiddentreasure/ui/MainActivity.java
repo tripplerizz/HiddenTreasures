@@ -35,12 +35,14 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private AppBarConfiguration mAppBarConfiguration;
     private NavController navController;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static String perms[] = {
+
+    private static final String[] perms = {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.INTERNET,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
     };
 
     @Override
