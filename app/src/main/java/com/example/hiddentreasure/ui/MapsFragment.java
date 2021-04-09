@@ -21,6 +21,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.hiddentreasure.R;
+import com.example.hiddentreasure.db.TreasureDatabase;
+import com.example.hiddentreasure.db.TreasureItem;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,53 +32,85 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.model.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapsFragment extends Fragment {
     private static final String TAG = "MapsFragment";
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mCurrentLocation;
+    private TreasureDatabase mDatabase;
+    private ArrayList<TreasureItem> mTreasureItems = new ArrayList<>();
 
 
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+    private final OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
             }
-            String url = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Midtown_atlanta_%28cropped%29.jpg/850px-Midtown_atlanta_%28cropped%29.jpg";
+            CollectionReference reference = mDatabase.getCollection();
             googleMap.setMyLocationEnabled(true);
             Task<Location> task = mFusedLocationProviderClient.getLastLocation();
             task.addOnSuccessListener(location -> {
                 if (location != null) {
                     mCurrentLocation = location;
                     LatLng curLocation = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-                    Glide.with(MapsFragment.this)
-                            .asBitmap()
-                            .load(url)
-                            .override(20, 32)
-                            .into(new CustomTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                    Log.d(TAG, "onResourceReady: image is ready");
-                                    googleMap.addMarker(new MarkerOptions()
-                                            .position(curLocation)
-                                            .title("Marker in Atlanta")
-                                            .icon(BitmapDescriptorFactory.fromBitmap(resource))
-                                    );
-                                }
+                    reference.addSnapshotListener((value, error) -> {
+                        for (DocumentSnapshot documentSnapshot : value.getDocuments()) {
+                            TreasureItem item = documentSnapshot.toObject(TreasureItem.class);
+                            addMarker(googleMap, curLocation, item);
+                        }
+                    });
 
-                                @Override
-                                public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                                }
-                            });
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLocation, 16f));
                 }
             });
 
         }
     };
+
+    private void addMarker(GoogleMap googleMap, LatLng location, TreasureItem item) {
+        Glide.with(MapsFragment.this)
+                .asBitmap()
+                .load(item.getImageUrl())
+                .override(125, 125)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        Log.d(TAG, "onResourceReady: image is ready");
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(location)
+                                .title(item.getName())
+                                .icon(BitmapDescriptorFactory.fromBitmap(resource))
+                        );
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mDatabase = TreasureDatabase.getInstance(getContext());
+
+
+    }
 
     @Nullable
     @Override
