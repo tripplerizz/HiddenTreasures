@@ -48,12 +48,6 @@ public class TreasureInfoFragment extends Fragment {
         TextView itemInfo = v.findViewById(R.id.itemInfo);
         itemInfoString = String.format(itemInfoString, item.getName(), item.getDescription());
         itemInfo.setText(itemInfoString);
-        // TODO add UI to this fragment
-        // This is where the user clicks on a picture from Home and you need to display stuff
-        // Let me know what features you want to add to this area such as location, requesting the
-        // item, etc. You'll want to display the name, description, and picture of the item. All of
-        // info you need is in the TreasureItem object. An example on how to retrieve the data
-        // is in onCreate()
         return v;
     }
 }
