@@ -39,6 +39,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.model.Document;
@@ -51,8 +52,6 @@ public class MapsFragment extends Fragment {
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mCurrentLocation;
     private TreasureDatabase mDatabase;
-    private ArrayList<TreasureItem> mTreasureItems = new ArrayList<>();
-
 
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
@@ -70,11 +69,13 @@ public class MapsFragment extends Fragment {
                     reference.addSnapshotListener((value, error) -> {
                         for (DocumentSnapshot documentSnapshot : value.getDocuments()) {
                             TreasureItem item = documentSnapshot.toObject(TreasureItem.class);
-                            addMarker(googleMap, curLocation, item);
+                            GeoPoint itemLocation = item.getLocation();
+                            LatLng itemLatLng = new LatLng(itemLocation.getLatitude(), itemLocation.getLongitude());
+                            addMarker(googleMap, itemLatLng, item);
                         }
                     });
 
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLocation, 16f));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLocation, 14f));
                 }
             });
 
