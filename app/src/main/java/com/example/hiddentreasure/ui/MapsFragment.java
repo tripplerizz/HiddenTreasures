@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -30,17 +31,20 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
 
 public class MapsFragment extends Fragment {
     private static final String TAG = "MapsFragment";
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mCurrentLocation;
     private TreasureDatabase mDatabase;
+    private Button mGetMoreInfoBtn;
 
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
@@ -67,6 +71,7 @@ public class MapsFragment extends Fragment {
                 }
             });
 
+            // googleMap.setOnMarkerClickListener(marker -> false);
         }
     };
 
@@ -121,7 +126,13 @@ public class MapsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_maps, container, false);
+        mGetMoreInfoBtn = v.findViewById(R.id.get_more_info_btn);
+        mGetMoreInfoBtn.setOnClickListener(v1 -> {
+
+        });
+        return v;
     }
 
     @Override
