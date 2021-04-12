@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView mTreasureRecyclerView;
     private TreasureAdapter mTreasureAdapter;
     private NavController mNavController;
-    HomeViewModel mHomeViewModel;
+    private HomeViewModel mHomeViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

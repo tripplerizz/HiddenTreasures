@@ -36,8 +36,6 @@ import com.google.firebase.firestore.GeoPoint;
 public class TreasureInfoFragment extends Fragment {
     private static final String TAG = "TreasureInfoFragment";
     private TreasureItem item;
-    private String itemInfoString = "Name: %s\nDescription: %s\n";
-    private SupportMapFragment mGoogleMap;
     private TextView mDescription;
 
     @Override

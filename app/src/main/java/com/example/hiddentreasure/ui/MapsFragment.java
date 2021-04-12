@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -30,17 +33,27 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 public class MapsFragment extends Fragment {
     private static final String TAG = "MapsFragment";
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mCurrentLocation;
     private TreasureDatabase mDatabase;
+    private Button mGetMoreInfoBtn;
+    private TreasureItem mCurItem;
+    private NavController mNavController;
 
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
@@ -67,6 +80,22 @@ public class MapsFragment extends Fragment {
                 }
             });
 
+            googleMap.setOnMarkerClickListener(marker -> {
+                // Query database to get Treasure Item based on name, flawed but it works for now
+                mDatabase.getCollection().whereEqualTo("name", marker.getTitle())
+                        .addSnapshotListener((value, error) -> {
+                            List<DocumentSnapshot> treasureItems = value.getDocuments();
+                            if (treasureItems.size() == 0) {
+                                Log.d(TAG, "onMapReady: no items in query");
+                            } else {
+                                mCurItem = treasureItems.get(0).toObject(TreasureItem.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable(HomeFragment.TREASURE_TAG, mCurItem);
+                                mNavController.navigate(R.id.action_nav_maps_to_treasureInfoFragment, bundle);
+                            }
+                        });
+                return false;
+            });
         }
     };
 
@@ -77,11 +106,9 @@ public class MapsFragment extends Fragment {
                 TreasureItem item = documentSnapshot.toObject(TreasureItem.class);
                 GeoPoint itemLocation = item.getLocation();
                 LatLng itemLatLng = new LatLng(itemLocation.getLatitude(), itemLocation.getLongitude());
-
-                if (getActivity() == null)  {
+                if (getActivity() == null) {
                     continue;
                 }
-
                 addMarkerToMapWithPicture(googleMap, itemLatLng, item);
             }
         });
@@ -114,6 +141,7 @@ public class MapsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDatabase = TreasureDatabase.getInstance(getContext());
+        mNavController = NavHostFragment.findNavController(this);
     }
 
     @Nullable
