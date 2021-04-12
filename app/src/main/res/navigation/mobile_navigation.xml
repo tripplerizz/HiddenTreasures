@@ -16,7 +16,15 @@
         <action
             android:id="@+id/action_nav_home_to_treasureInfoFragment"
             app:destination="@id/treasureInfoFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_pirateSwipeFragment"
+            app:destination="@id/pirate_treasure_tinder" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.example.hiddentreasure.ui.GalleryFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_maps"
@@ -37,4 +45,13 @@
         android:name="com.example.hiddentreasure.ui.TreasureInfoFragment"
         android:label="Treasure"
         tools:layout="@layout/fragment_treasure_info" />
+    <fragment
+        android:id="@+id/pirate_treasure_tinder"
+        android:name="com.example.hiddentreasure.ui.PirateSwipeFragment"
+        android:label="PirateSwipeFragment"
+        tools:layout="@layout/pirate_treasure_tinder">
+        <action
+            android:id="@+id/action_pirateSwipeFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>

@@ -13,5 +13,9 @@
             android:id="@+id/nav_maps"
             android:icon="@drawable/ic_location"
             android:title="@string/maps"/>
+        <item
+            android:id="@+id/pirate_treasure_tinder"
+            android:icon="@drawable/ic_menu_send"
+            android:title="@string/pirate_addies"/>
     </group>
 </menu>
