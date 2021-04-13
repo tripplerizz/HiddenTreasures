@@ -30,6 +30,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
+
 import java.util.List;
 import java.util.Stack;
 
@@ -38,6 +40,7 @@ public class PirateSwipeFragment extends Fragment {
     private TreasureDatabase db;
     private  CollectionReference collectionReference;
     private  ImageView imageView;
+    private boolean acceptQuery;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,19 +76,25 @@ public class PirateSwipeFragment extends Fragment {
         ImageButton acceptButton = v.findViewById(R.id.acceptButton);
         acceptButton.setOnClickListener( view -> {
             String itemName = items.peek().getName();
+            acceptQuery = true;
+            //Query request =  db.getCollection().whereEqualTo("name", itemName).endAt("name", itemName);
             db.getCollection().whereEqualTo("name", itemName)
                 .addSnapshotListener( (value, error) ->
                 {
                     List<DocumentSnapshot> treasureItems = value.getDocuments();
                     if (treasureItems.size() > 0){
-                        // deleting
-                        treasureItems.get(0).getReference().delete();
                         // updating
                         TreasureItem temp = treasureItems.get(0).toObject(TreasureItem.class);
                         temp.setPiratesVisited(temp.getPiratesVisited() + 1);
-                        db.incrementPiratesVisited(itemName, temp);
-                        items.pop();
-                        readyTreasureCardView(v);
+                        // inserting to data base w same object. but incremented
+                        if (acceptQuery == true){
+                            db.incrementPiratesVisited(itemName, temp);
+                            if (items.size() != 0){
+                                items.pop();
+                            }
+                            readyTreasureCardView(v);
+                        }
+                        acceptQuery = false;
                     }
 
                 }
