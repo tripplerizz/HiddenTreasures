@@ -41,6 +41,7 @@ public class PirateSwipeFragment extends Fragment {
     private  CollectionReference collectionReference;
     private  ImageView imageView;
     private boolean acceptQuery;
+    private boolean acceptTreasure = true;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,9 @@ public class PirateSwipeFragment extends Fragment {
             // Iterate through each item in the database and add the item info to map
             for (DocumentSnapshot documentSnapshot : value.getDocuments()) {
                 TreasureItem item = documentSnapshot.toObject(TreasureItem.class);
-                items.push(item);
+                if (acceptTreasure){
+                    items.push(item);
+                }
                 if (getActivity() == null)  {
                     continue;
                 }
@@ -66,6 +69,8 @@ public class PirateSwipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.pirate_treasure_tinder, container, false);
+        // accepting new content from data base
+        acceptTreasure = true;
         findTreasureItem(collectionReference, v);
         // Skipping items which were unvisited by Pirate
         ImageButton skipButton = v.findViewById(R.id.skipButton);
@@ -76,6 +81,7 @@ public class PirateSwipeFragment extends Fragment {
         ImageButton acceptButton = v.findViewById(R.id.acceptButton);
         acceptButton.setOnClickListener( view -> {
             String itemName = items.peek().getName();
+            acceptTreasure = false;
             acceptQuery = true;
             //Query request =  db.getCollection().whereEqualTo("name", itemName).endAt("name", itemName);
             db.getCollection().whereEqualTo("name", itemName)

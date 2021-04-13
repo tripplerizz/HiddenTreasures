@@ -37,6 +37,7 @@ public class TreasureInfoFragment extends Fragment {
     private static final String TAG = "TreasureInfoFragment";
     private TreasureItem item;
     private TextView mDescription;
+    private TextView pirateCount;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +71,9 @@ public class TreasureInfoFragment extends Fragment {
         mDescription = v.findViewById(R.id.description_tv);
         itemInfo.setText(item.getName());
         mDescription.setText(item.getDescription());
+        pirateCount = v.findViewById(R.id.pirate_counter);
+        String pirateCountString =  String.valueOf(item.getPiratesVisited());
+        pirateCount.setText( "Pirate Count: " + pirateCountString);
         return v;
     }
 
