@@ -71,22 +71,47 @@ public class PirateSwipeFragment extends Fragment {
             readyTreasureCardView(v);
         });
         ImageButton acceptButton = v.findViewById(R.id.acceptButton);
+        acceptButton.setOnClickListener( view -> {
+            String itemName = items.peek().getName();
+            db.getCollection().whereEqualTo("name", itemName)
+                .addSnapshotListener( (value, error) ->
+                {
+                    List<DocumentSnapshot> treasureItems = value.getDocuments();
+                    if (treasureItems.size() > 0){
+                        // deleting
+                        treasureItems.get(0).getReference().delete();
+                        // updating
+                        TreasureItem temp = treasureItems.get(0).toObject(TreasureItem.class);
+                        temp.setPiratesVisited(temp.getPiratesVisited() + 1);
+                        db.incrementPiratesVisited(itemName, temp);
+                        items.pop();
+                        readyTreasureCardView(v);
+                    }
+
+                }
+            );
+
+        });
         return v;
     }
     public void readyTreasureCardView(View v){
         imageView = v.findViewById(R.id.ItemSwipePhoto);
-        String ImageUrl = items.peek().getImageUrl();
-        Glide
-                .with(imageView.getContext())
-                .load(ImageUrl)
-                .centerCrop()
-                .into(new ImageViewTarget<Drawable>(imageView) {
-                    @Override
-                    protected void setResource(@Nullable Drawable resource) {
-                        imageView.setImageDrawable(resource);
-                    }
-                });
+        if (items.size() != 0){
+            String ImageUrl = items.peek().getImageUrl();
+            Glide
+                    .with(imageView.getContext())
+                    .load(ImageUrl)
+                    .centerCrop()
+                    .into(new ImageViewTarget<Drawable>(imageView) {
+                        @Override
+                        protected void setResource(@Nullable Drawable resource) {
+                            imageView.setImageDrawable(resource);
+                        }
+                    });
+        }else{
+            imageView.setImageDrawable(null);
+        }
 
     }
 
-}
+        }

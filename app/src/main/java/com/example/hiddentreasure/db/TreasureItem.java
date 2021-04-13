@@ -13,6 +13,7 @@ public class TreasureItem implements Parcelable {
     private String description;
     private String imageUrl;
     private GeoPoint location;
+    private int piratesVisited;
 
     public TreasureItem() {
     }
@@ -22,6 +23,7 @@ public class TreasureItem implements Parcelable {
         this.description = description;
         this.imageUrl = imageUrl;
         this.location = location;
+        this.piratesVisited = 1;
     }
 
     protected TreasureItem(Parcel in) {
@@ -29,6 +31,13 @@ public class TreasureItem implements Parcelable {
         description = in.readString();
         imageUrl = in.readString();
     }
+    public int getPiratesVisited(){
+        return this.piratesVisited;
+    }
+    public void setPiratesVisited(int val){
+        this.piratesVisited = val;
+    }
+
 
     public static final Creator<TreasureItem> CREATOR = new Creator<TreasureItem>() {
         @Override

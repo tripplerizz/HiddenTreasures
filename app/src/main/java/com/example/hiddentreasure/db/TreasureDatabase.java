@@ -58,6 +58,13 @@ public class TreasureDatabase {
         mCollection = mFirebaseFirestore.collection(TREASURE_COLLECTION);
         mStorageReference = mFirebaseStorage.getReference();
     }
+    public void incrementPiratesVisited(String name, TreasureItem item){
+        mCollection.document(name).set(item)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "onSuccess: Successfully written!"))
+                .addOnFailureListener(e -> Log.d(TAG, "onFailure: Error writing document"));
+
+    }
+
 
     public void uploadPhoto(String name, String description, Bitmap bitmap, GeoPoint location) {
         StorageReference reference = mStorageReference.child(name + ".jpeg");
