@@ -27,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
@@ -78,6 +79,12 @@ public class PirateSwipeFragment extends Fragment {
             items.pop();
             readyTreasureCardView(v);
         });
+        //removing floating action button
+        FloatingActionButton fab = getActivity().findViewById(R.id.add_treasure_fab);
+        if (fab != null){
+            fab.setVisibility(View.INVISIBLE);
+        }
+
         ImageButton acceptButton = v.findViewById(R.id.acceptButton);
         acceptButton.setOnClickListener( view -> {
             String itemName = items.peek().getName();
@@ -129,4 +136,4 @@ public class PirateSwipeFragment extends Fragment {
 
     }
 
-        }
+}

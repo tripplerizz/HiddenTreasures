@@ -52,6 +52,11 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         mTreasureRecyclerView = v.findViewById(R.id.treasure_rv);
         mHomeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        // making Floating action invisable when un-needed
+        FloatingActionButton fab = getActivity().findViewById(R.id.add_treasure_fab);
+        if (fab != null){
+            fab.setVisibility(View.VISIBLE);
+        }
         initializeRecyclerView();
         return v;
     }

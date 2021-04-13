@@ -84,7 +84,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 .build();
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
+        // setting visibility of button and action
+        fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(v -> {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
