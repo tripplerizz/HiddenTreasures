@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -53,6 +54,11 @@ public class TreasureInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_treasure_info, container, false);
+        // removing add floating button
+        FloatingActionButton fab = getActivity().findViewById(R.id.add_treasure_fab);
+        if (fab != null){
+            fab.setVisibility(View.INVISIBLE);
+        }
 
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
