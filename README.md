@@ -24,7 +24,7 @@ An app to find cool local places wherever you travel!
   - Treasure Item Info -> (information page)
     - this page will load when you click an image on the MAPS or HOME fragment
     - by clicking on the maps segment in the information page, you will navigate to Google Maps application to start route to location
-      - information
+      - ### information displayed by fragment
         - Image, Location, Name, Descriptiong, and Pirate Count ( number of people who have been there )
   
 
