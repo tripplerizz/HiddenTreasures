@@ -9,12 +9,17 @@
         android:id="@+id/nav_home"
         android:name="com.example.hiddentreasure.ui.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_to_nav_survey"
             app:destination="@id/nav_survey" />
+        <action
+            android:id="@+id/action_nav_home_to_treasureInfoFragment"
+            app:destination="@id/treasureInfoFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_pirateSwipeFragment"
+            app:destination="@id/pirate_treasure_tinder" />
     </fragment>
-
     <fragment
         android:id="@+id/nav_gallery"
         android:name="com.example.hiddentreasure.ui.GalleryFragment"
@@ -22,18 +27,35 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.hiddentreasure.ui.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-    <fragment
         android:id="@+id/nav_maps"
         android:name="com.example.hiddentreasure.ui.MapsFragment"
-        android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" />
+        android:label="Maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_nav_maps_to_treasureInfoFragment"
+            app:destination="@id/treasureInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_survey"
         android:name="com.example.hiddentreasure.ui.PirateCamera.PirateSurveyFragment"
-        android:label="fragment_pirate_survey"
-        tools:layout="@layout/pirate_survay" />
+        android:label="Pirate Survey"
+        tools:layout="@layout/pirate_survey" >
+        <action
+            android:id="@+id/action_nav_survey_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/treasureInfoFragment"
+        android:name="com.example.hiddentreasure.ui.TreasureInfoFragment"
+        android:label="Treasure"
+        tools:layout="@layout/fragment_treasure_info" />
+    <fragment
+        android:id="@+id/pirate_treasure_tinder"
+        android:name="com.example.hiddentreasure.ui.PirateSwipeFragment"
+        android:label="PirateSwipeFragment"
+        tools:layout="@layout/pirate_treasure_tinder">
+        <action
+            android:id="@+id/action_pirateSwipeFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>

@@ -1,27 +1,23 @@
 package com.example.hiddentreasure.viewmodels;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
-import com.example.hiddentreasure.models.TreasureItem;
-import com.example.hiddentreasure.repositories.TreasureRepository;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 
-import java.util.List;
+import com.example.hiddentreasure.db.TreasureDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.Query;
 
-public class HomeViewModel extends ViewModel {
-    private MutableLiveData<List<TreasureItem>> mTreasureItems;
-    private TreasureRepository mTreasureRepository;
+public class HomeViewModel extends AndroidViewModel {
+    private final TreasureDatabase mDatabase;
 
-    public LiveData<List<TreasureItem>> getTreasureItems() {
-        return mTreasureItems;
+    public HomeViewModel(@NonNull Application application) {
+        super(application);
+        mDatabase = TreasureDatabase.getInstance(application);
     }
 
-    public void init() {
-        if (mTreasureItems != null) {
-            return;
-        }
-        mTreasureRepository = TreasureRepository.getInstance();
-        mTreasureItems = mTreasureRepository.getTreasureItems();
+    public Query getQuery() {
+        return mDatabase.getCollection();
     }
 }
