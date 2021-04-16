@@ -1,6 +1,6 @@
 # Hidden Treasures
 
-Kevin Nguyen
+Kevin Nguyen and
 Hector Rizo
 
 An app to find cool local places wherever you travel!
